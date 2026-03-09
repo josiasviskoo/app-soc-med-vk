@@ -7,8 +7,10 @@ O Título do Plugin é Viskoo Media Hub, e a descrição é: Aplicação de apro
 
 Crie funcionalidades para toda a estrutura anexa, porém utilize o wordpress para gerenciar os dados e informações.
 
-## Dashboard
 
+## Dashboard
+- Onde está "Bella Cucina" é o nome do cliente e onde está "Restaurante & Bar" é uma sub-headline. No Administrador do wordpress eu cadastro a empresa e coloco esssas informações para pode exibir na dashboard.
+- Onde existe o número de Pendentes, aprovados e revisão são indicadores dos cards
 
 ## Administrador Wordpress
 
