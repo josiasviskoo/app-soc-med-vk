@@ -1,0 +1,18 @@
+O Arquivo dashboard.html é o arquivo de layout front-end da aplicação dashboard que vamos desenvolver.
+Utilize o arquivo dashboard.html para implementar as funcionalidades.
+
+Crie um plugin wordpress, esse plugin é como autor Josias Viskoo e o link de acesso é viskoo.com.br.
+
+O Título do Plugin é Viskoo Media Hub, e a descrição é: Aplicação de aprovação da conteúdo para clientes exclusivos da Viskoo.
+
+Crie funcionalidades para toda a estrutura anexa, porém utilize o wordpress para gerenciar os dados e informações.
+
+## Dashboard
+
+
+## Administrador Wordpress
+
+## Administrador na dashboard
+
+
+## Regras gerais

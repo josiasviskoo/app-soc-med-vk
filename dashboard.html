@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bella Cucina — Aprovação de Conteúdos</title>
+  <meta name="description" content="Plataforma de aprovação de conteúdos para redes sociais — Bella Cucina Restaurante & Bar" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: hsl(240 10% 6%);
+      --fg: hsl(0 0% 95%);
+      --card: hsl(240 8% 10%);
+      --card-fg: hsl(0 0% 95%);
+      --primary: hsl(24 90% 50%);
+      --primary-fg: hsl(0 0% 100%);
+      --secondary: hsl(240 6% 16%);
+      --secondary-fg: hsl(0 0% 85%);
+      --muted: hsl(240 5% 18%);
+      --muted-fg: hsl(240 5% 55%);
+      --accent: hsl(32 80% 55%);
+      --accent-fg: hsl(0 0% 100%);
+      --border: hsl(240 5% 18%);
+      --success: hsl(142 71% 45%);
+      --success-fg: hsl(0 0% 100%);
+      --warning: hsl(38 92% 50%);
+      --warning-fg: hsl(0 0% 10%);
+      --destructive: hsl(0 72% 51%);
+      --destructive-fg: hsl(0 0% 100%);
+      --ring: hsl(24 90% 50%);
+      --radius: 0.75rem;
+      --gradient-primary: linear-gradient(135deg, hsl(24 90% 50%), hsl(38 95% 55%));
+      --shadow-glow: 0 0 20px hsla(24, 90%, 50%, 0.15);
+      --shadow-card: 0 4px 24px hsla(0, 0%, 0%, 0.3);
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); }
+
+    /* ─── Utilities ─── */
+    .gradient-primary { background: var(--gradient-primary); }
+    .shadow-glow { box-shadow: var(--shadow-glow); }
+    .shadow-card { box-shadow: var(--shadow-card); }
+    .glass { backdrop-filter: blur(12px); background: hsla(240, 8%, 10%, 0.7); }
+    .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* ─── Header ─── */
+    .header {
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .header-inner {
+      max-width: 80rem;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-left { display: flex; align-items: center; gap: 1rem; }
+    .header-logo {
+      width: 2.5rem; height: 2.5rem;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      background: #fff;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .header-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .header-title { font-size: 1.125rem; font-weight: 600; }
+    .header-sub { font-size: 0.75rem; color: var(--muted-fg); }
+    .header-right { display: flex; align-items: center; gap: 1.5rem; }
+    .header-stats { display: flex; align-items: center; gap: 1.5rem; font-size: 0.875rem; color: var(--muted-fg); }
+    .stat { display: flex; flex-direction: column; align-items: center; }
+    .stat-num { font-family: var(--font-heading); font-weight: 600; font-size: 1.125rem; color: var(--fg); }
+    .stat-num.success { color: var(--success); }
+    .stat-num.primary { color: var(--primary); }
+    .stat-label { font-size: 0.75rem; }
+    .avatar {
+      width: 2.25rem; height: 2.25rem;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.875rem; font-weight: 600; color: var(--primary-fg);
+    }
+
+    /* ─── Main ─── */
+    .main { max-width: 80rem; margin: 0 auto; padding: 1.5rem 1rem; }
+    .section-title { font-size: 1.25rem; font-weight: 600; }
+    .section-sub { font-size: 0.875rem; color: var(--muted-fg); margin-top: 0.125rem; }
+
+    /* ─── Controls Row ─── */
+    .controls {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ─── Stage Toggle ─── */
+    .stage-toggle {
+      display: flex; gap: 0.25rem; padding: 0.25rem;
+      background: var(--secondary); border-radius: var(--radius);
+    }
+    .stage-btn {
+      padding: 0.625rem 1.25rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: none; cursor: pointer;
+      color: var(--muted-fg);
+      background: transparent;
+      transition: all 0.2s;
+    }
+    .stage-btn.active {
+      color: var(--primary-fg);
+      box-shadow: var(--shadow-glow);
+    }
+    .stage-btn:hover:not(.active) { color: var(--fg); }
+
+    /* ─── Timeline ─── */
+    .timeline {
+      display: flex; gap: 0.5rem; overflow-x: auto;
+      padding-bottom: 0.5rem; margin-bottom: 0.75rem;
+    }
+    .timeline::-webkit-scrollbar { display: none; }
+    .timeline-btn {
+      flex-shrink: 0;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border: none; cursor: pointer;
+      background: var(--secondary);
+      color: var(--muted-fg);
+      transition: all 0.2s;
+    }
+    .timeline-btn.active {
+      color: var(--primary-fg);
+      box-shadow: var(--shadow-glow);
+    }
+    .timeline-btn:hover:not(.active) { color: var(--fg); }
+
+    /* ─── Status Filter ─── */
+    .status-filter { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .filter-btn {
+      display: flex; align-items: center; gap: 0.375rem;
+      padding: 0.375rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      border: none; cursor: pointer;
+      color: var(--muted-fg);
+      background: transparent;
+      transition: all 0.2s;
+    }
+    .filter-btn.active {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      box-shadow: 0 1px 3px hsla(0,0%,0%,0.2);
+    }
+    .filter-btn:hover:not(.active) { color: var(--fg); }
+    .filter-dot { width: 0.375rem; height: 0.375rem; border-radius: 50%; }
+    .dot-warning { background: var(--warning); }
+    .dot-success { background: var(--success); }
+    .dot-primary { background: var(--primary); }
+
+    /* ─── Card Grid ─── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1rem;
+    }
+    .masonry {
+      columns: 1;
+      column-gap: 1rem;
+    }
+    @media (min-width: 640px) { .masonry { columns: 2; } }
+    @media (min-width: 1024px) { .masonry { columns: 3; } }
+
+    /* ─── Content Card ─── */
+    .content-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+      break-inside: avoid;
+      margin-bottom: 1rem;
+    }
+    .content-card:hover { box-shadow: var(--shadow-card); }
+    .content-card.border-success { border-color: hsla(142, 71%, 45%, 0.4); }
+    .content-card.border-primary { border-color: hsla(24, 90%, 50%, 0.4); }
+
+    .card-media {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+    .card-media.square { aspect-ratio: 1 / 1; }
+    .card-media.portrait { aspect-ratio: 9 / 16; }
+    .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .card-badges {
+      position: absolute;
+      top: 0.75rem; left: 0.75rem;
+      display: flex; gap: 0.375rem;
+    }
+    .badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.375rem;
+      font-size: 0.625rem;
+      font-weight: 500;
+      display: flex; align-items: center; gap: 0.25rem;
+    }
+    .badge-glass { backdrop-filter: blur(12px); background: hsla(240, 8%, 10%, 0.7); color: var(--fg); }
+    .badge-accent { background: hsla(32, 80%, 55%, 0.15); color: var(--accent); }
+    .badge-warning-bg { background: hsla(38, 92%, 50%, 0.15); color: var(--warning); }
+    .badge-success-bg { background: hsla(142, 71%, 45%, 0.15); color: var(--success); }
+    .badge-primary-bg { background: hsla(24, 90%, 50%, 0.15); color: var(--primary); }
+
+    .card-status {
+      position: absolute;
+      top: 0.75rem; right: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.375rem;
+      font-size: 0.625rem;
+      font-weight: 500;
+    }
+    .status-pending { background: hsla(38, 92%, 50%, 0.9); color: var(--warning-fg); }
+    .status-approved { background: hsla(142, 71%, 45%, 0.9); color: var(--success-fg); }
+    .status-rejected { background: hsla(24, 90%, 50%, 0.9); color: var(--primary-fg); }
+
+    .card-body { padding: 1rem; }
+    .card-meta { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--muted-fg); margin-bottom: 0.5rem; }
+    .card-meta .dot { color: hsla(240, 5%, 55%, 0.5); }
+    .card-caption { font-size: 0.875rem; line-height: 1.6; margin-bottom: 0.5rem; }
+    .card-preview-link { font-size: 0.625rem; color: var(--accent); cursor: pointer; display: flex; align-items: center; gap: 0.375rem; margin-bottom: 0.75rem; }
+
+    /* ─── Timer ─── */
+    .timer-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .timer-bar-bg { flex: 1; }
+    .timer-labels { display: flex; justify-content: space-between; margin-bottom: 0.25rem; }
+    .timer-label { font-size: 0.625rem; color: var(--muted-fg); }
+    .timer-mono { font-family: monospace; }
+    .timer-track { width: 100%; height: 0.25rem; background: var(--secondary); border-radius: 9999px; overflow: hidden; }
+    .timer-fill { height: 100%; background: var(--warning); border-radius: 9999px; transition: width 1s linear; }
+
+    /* ─── Action Buttons ─── */
+    .action-row { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+    .btn-approve {
+      flex: 1;
+      display: flex; align-items: center; justify-content: center; gap: 0.375rem;
+      padding: 0.625rem;
+      border-radius: 0.5rem;
+      border: none; cursor: pointer;
+      font-size: 0.75rem; font-weight: 500;
+      background: hsla(142, 71%, 45%, 0.1); color: var(--success);
+      transition: background 0.2s;
+    }
+    .btn-approve:hover { background: hsla(142, 71%, 45%, 0.2); }
+    .btn-reject {
+      flex: 1;
+      display: flex; align-items: center; justify-content: center; gap: 0.375rem;
+      padding: 0.625rem;
+      border-radius: 0.5rem;
+      border: none; cursor: pointer;
+      font-size: 0.75rem; font-weight: 500;
+      background: hsla(24, 90%, 50%, 0.1); color: var(--primary);
+      transition: background 0.2s;
+    }
+    .btn-reject:hover { background: hsla(24, 90%, 50%, 0.2); }
+    .btn-comment {
+      width: 2.5rem; height: 2.5rem;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 0.5rem;
+      border: none; cursor: pointer;
+      background: var(--secondary); color: var(--muted-fg);
+      transition: color 0.2s;
+    }
+    .btn-comment:hover { color: var(--fg); }
+
+    .btn-delete {
+      margin-top: 0.75rem;
+      width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 0.375rem;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: 2px dashed hsla(240, 5%, 55%, 0.25);
+      background: transparent;
+      color: hsla(240, 5%, 55%, 0.5);
+      font-size: 0.6875rem; font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-delete:hover {
+      border-color: hsla(0, 72%, 51%, 0.5);
+      color: var(--destructive);
+      background: hsla(0, 72%, 51%, 0.05);
+    }
+
+    .suggest-date-btn {
+      flex: 1;
+      display: flex; align-items: center; gap: 0.375rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--secondary);
+      color: var(--muted-fg);
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    /* ─── Comment Box ─── */
+    .comment-box {
+      margin-top: 0.75rem;
+    }
+    .comment-box textarea {
+      width: 100%;
+      background: var(--secondary);
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--fg);
+      border: none;
+      resize: none;
+      font-family: var(--font-body);
+      outline: none;
+    }
+    .comment-box textarea::placeholder { color: var(--muted-fg); }
+    .comment-box textarea:focus { box-shadow: 0 0 0 1px var(--ring); }
+    .btn-send-feedback {
+      margin-top: 0.5rem;
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--primary-fg);
+    }
+
+    .rejection-reason {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      background: hsla(24, 90%, 50%, 0.05);
+      border: 1px solid hsla(24, 90%, 50%, 0.2);
+      border-radius: 0.5rem;
+    }
+    .rejection-reason .label { font-size: 0.625rem; color: var(--primary); font-weight: 500; margin-bottom: 0.25rem; }
+    .rejection-reason .text { font-size: 0.75rem; color: var(--muted-fg); line-height: 1.5; }
+
+    /* ─── Headline Card ─── */
+    .headline-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      transition: box-shadow 0.2s;
+    }
+    .headline-card:hover { box-shadow: var(--shadow-card); }
+    .headline-card.border-success { border-color: hsla(142, 71%, 45%, 0.4); }
+    .headline-card.border-primary { border-color: hsla(24, 90%, 50%, 0.4); }
+    .headline-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+    .headline-meta-left { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--muted-fg); }
+    .headline-status { font-size: 0.75rem; padding: 0.125rem 0.5rem; border-radius: 9999px; }
+    .hs-pending { background: hsla(38, 92%, 50%, 0.15); color: var(--warning); }
+    .hs-approved { background: hsla(142, 71%, 45%, 0.15); color: var(--success); }
+    .hs-rejected { background: hsla(24, 90%, 50%, 0.15); color: var(--primary); }
+    .headline-text { font-size: 0.875rem; line-height: 1.6; margin-bottom: 1rem; }
+
+    /* ─── Add Card ─── */
+    .add-card {
+      border: 2px dashed hsla(240, 5%, 55%, 0.3);
+      border-radius: var(--radius);
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 1rem;
+    }
+    .add-card:hover { border-color: hsla(24, 90%, 50%, 0.5); background: hsla(24, 90%, 50%, 0.05); }
+    .add-card .plus-circle {
+      width: 2.25rem; height: 2.25rem;
+      border-radius: 50%;
+      border: 2px dashed hsla(240, 5%, 55%, 0.3);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 0.2s;
+    }
+    .add-card:hover .plus-circle { border-color: hsla(24, 90%, 50%, 0.5); }
+    .add-card .plus-icon { color: hsla(240, 5%, 55%, 0.5); font-size: 1rem; transition: color 0.2s; }
+    .add-card:hover .plus-icon { color: var(--primary); }
+    .add-card .add-label { font-size: 0.75rem; font-weight: 500; color: hsla(240, 5%, 55%, 0.7); transition: color 0.2s; }
+    .add-card:hover .add-label { color: var(--primary); }
+    .add-card .add-sub { font-size: 0.625rem; color: hsla(240, 5%, 55%, 0.4); }
+
+    /* ─── Video Play ─── */
+    .play-overlay {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: hsla(240, 10%, 6%, 0.3);
+    }
+    .play-btn {
+      width: 3rem; height: 3rem;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ─── Carousel Dots ─── */
+    .carousel-dots {
+      position: absolute; bottom: 0.75rem;
+      left: 0; right: 0;
+      display: flex; justify-content: center; gap: 0.375rem;
+    }
+    .carousel-dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: hsla(0, 0%, 95%, 0.3); border: none; cursor: pointer; }
+    .carousel-dot.active { background: var(--fg); }
+
+    /* ─── Toast ─── */
+    .toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200; display: flex; flex-direction: column; gap: 0.5rem; }
+    .toast {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      font-size: 0.8125rem;
+      color: var(--fg);
+      box-shadow: var(--shadow-card);
+      animation: toast-in 0.3s ease-out;
+      min-width: 250px;
+    }
+    .toast-title { font-weight: 600; margin-bottom: 0.125rem; }
+    .toast-desc { font-size: 0.75rem; color: var(--muted-fg); }
+    @keyframes toast-in {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Confirm Dialog ─── */
+    .dialog-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      background: hsla(0, 0%, 0%, 0.6);
+      display: flex; align-items: center; justify-content: center;
+      animation: fade-in 0.15s ease-out;
+    }
+    .dialog-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      max-width: 400px; width: 90%;
+      box-shadow: var(--shadow-card);
+    }
+    .dialog-title { font-family: var(--font-heading); font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .dialog-desc { font-size: 0.875rem; color: var(--muted-fg); margin-bottom: 1.25rem; }
+    .dialog-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+    .dialog-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: none; cursor: pointer;
+    }
+    .dialog-cancel { background: var(--secondary); color: var(--fg); }
+    .dialog-cancel:hover { background: var(--muted); }
+    .dialog-confirm { background: var(--destructive); color: var(--destructive-fg); }
+    .dialog-confirm:hover { opacity: 0.9; }
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ─── Empty State ─── */
+    .empty-state { text-align: center; padding: 4rem 1rem; color: var(--muted-fg); font-size: 0.875rem; }
+
+    /* ─── SVG Icons (inline) ─── */
+    .icon { display: inline-block; vertical-align: middle; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 640px) {
+      .header-stats { display: none; }
+      .controls { flex-direction: column; align-items: flex-start; }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Confirm Dialog -->
+  <div id="confirm-dialog" class="dialog-overlay" style="display:none">
+    <div class="dialog-box">
+      <div class="dialog-title" id="dialog-title">Excluir?</div>
+      <div class="dialog-desc" id="dialog-desc">Essa ação não pode ser desfeita.</div>
+      <div class="dialog-actions">
+        <button class="dialog-btn dialog-cancel" onclick="closeDialog()">Cancelar</button>
+        <button class="dialog-btn dialog-confirm" id="dialog-confirm-btn">Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header glass">
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="header-logo">
+          <svg width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="#e87c1e"/><text x="16" y="22" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" font-family="Space Grotesk,sans-serif">BC</text></svg>
+        </div>
+        <div>
+          <h1 class="header-title">Bella Cucina</h1>
+          <p class="header-sub">Restaurante & Bar</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="header-stats">
+          <div class="stat">
+            <span class="stat-num" id="count-pending">7</span>
+            <span class="stat-label">Pendentes</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num success" id="count-approved">2</span>
+            <span class="stat-label">Aprovados</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num primary" id="count-rejected">2</span>
+            <span class="stat-label">Revisão</span>
+          </div>
+        </div>
+        <div class="avatar gradient-primary">JC</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="main">
+    <!-- Controls -->
+    <div class="controls">
+      <div>
+        <h2 class="section-title">Aprovação de Conteúdos</h2>
+        <p class="section-sub">Revise e aprove os conteúdos criados pela agência</p>
+      </div>
+      <div class="stage-toggle" id="stage-toggle">
+        <button class="stage-btn" data-stage="headlines" onclick="setStage('headlines')">📝 Headlines</button>
+        <button class="stage-btn active gradient-primary" data-stage="content" onclick="setStage('content')">🎨 Conteúdos</button>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline" id="timeline"></div>
+
+    <!-- Status Filter -->
+    <div class="status-filter" id="status-filter"></div>
+
+    <!-- Content Area -->
+    <div id="content-area"></div>
+  </main>
+
+  <script>
+    // ─── Data ───
+    const SAMPLE_IMAGES = [
+      'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=600&fit=crop',
+    ];
+
+    const dates = ["Todos", "03 Mar", "05 Mar", "07 Mar", "10 Mar", "12 Mar", "14 Mar", "17 Mar"];
+
+    let headlines = [
+      { id: 1, date: "03 Mar", headline: "Descubra o sabor que transforma o seu dia. Venha viver a experiência Bella Cucina! 🍝✨", platform: "instagram", status: "pending" },
+      { id: 2, date: "03 Mar", headline: "Cada prato conta uma história. A sua começa aqui.", platform: "facebook", status: "approved" },
+      { id: 3, date: "05 Mar", headline: "Novo menu de verão chegando! Prepare-se para sabores inesquecíveis 🌞🍹", platform: "both", status: "pending" },
+      { id: 4, date: "07 Mar", headline: "A melhor happy hour da cidade agora é na Bella Cucina. De seg a sex, das 17h às 20h 🍸", platform: "instagram", status: "rejected" },
+      { id: 5, date: "10 Mar", headline: "Sexta é dia de pizza artesanal com massa feita na hora! Reserve sua mesa 🍕", platform: "both", status: "pending" },
+      { id: 6, date: "12 Mar", headline: "O brunch dos sonhos te espera todo sábado. De panquecas a ovos beneditinos 🥞", platform: "instagram", status: "pending" },
+    ];
+
+    let contents = [
+      { id: 1, date: "03 Mar", caption: "Nosso burger artesanal com blend exclusivo, queijo cheddar derretido e molho da casa. Uma explosão de sabor a cada mordida! 🍔 #BellaCucina #BurgerArtesanal", mediaType: "image", mediaSrc: SAMPLE_IMAGES[0], platform: "instagram", status: "pending", contentFormat: "feed", carouselImages: [] },
+      { id: 2, date: "05 Mar", caption: "Aquele café perfeito pra começar o dia com energia. Nosso barista prepara com carinho cada xícara ☕ #CaféEspecial", mediaType: "image", mediaSrc: SAMPLE_IMAGES[1], platform: "both", status: "approved", contentFormat: "stories", carouselImages: [] },
+      { id: 3, date: "07 Mar", caption: "Conheça nossa nova linha de produtos artesanais. Ingredientes selecionados para levar o melhor até você 🧴✨", mediaType: "image", mediaSrc: SAMPLE_IMAGES[2], platform: "facebook", status: "pending", contentFormat: "carousel", carouselImages: [SAMPLE_IMAGES[2], SAMPLE_IMAGES[0], SAMPLE_IMAGES[1]] },
+      { id: 4, date: "10 Mar", caption: "Vista aérea do nosso terraço especial! Reserve para uma noite inesquecível sob as estrelas ✨🍷 #NightOut", mediaType: "video", mediaSrc: SAMPLE_IMAGES[3], platform: "instagram", status: "pending", contentFormat: "reels", carouselImages: [] },
+      { id: 5, date: "12 Mar", caption: "Sexta-feira combina com pizza artesanal! Massa fermentada por 48h, molho de tomate San Marzano 🍕", mediaType: "image", mediaSrc: SAMPLE_IMAGES[4], platform: "both", status: "rejected", contentFormat: "feed", carouselImages: [] },
+    ];
+
+    let activeStage = "content";
+    let activeDate = "Todos";
+    let activeStatus = "all";
+
+    // ─── Icons (SVG strings) ───
+    const icons = {
+      instagram: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>',
+      facebook: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>',
+      check: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+      x: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+      comment: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+      play: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
+      calendar: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+      clock: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+      plus: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+      image: '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>',
+      film: '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/></svg>',
+      grid: '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+      layers: '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>',
+    };
+
+    function platformIcon(p) {
+      if (p === 'both') return icons.instagram + icons.facebook;
+      return icons[p] || '';
+    }
+
+    const formatMeta = {
+      feed: { label: "Feed", icon: icons.grid, badgeClass: "badge-accent" },
+      stories: { label: "Stories", icon: icons.film, badgeClass: "badge-warning-bg" },
+      reels: { label: "Reels", icon: icons.film, badgeClass: "badge-success-bg" },
+      carousel: { label: "Carrossel", icon: icons.layers, badgeClass: "badge-primary-bg" },
+    };
+
+    // ─── Toast ───
+    function showToast(title, desc) {
+      const c = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.innerHTML = `<div class="toast-title">${title}</div><div class="toast-desc">${desc}</div>`;
+      c.appendChild(t);
+      setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 3000);
+    }
+
+    // ─── Confirm Dialog ───
+    let dialogCallback = null;
+    function showDialog(title, desc, cb) {
+      document.getElementById('dialog-title').textContent = title;
+      document.getElementById('dialog-desc').textContent = desc;
+      document.getElementById('confirm-dialog').style.display = 'flex';
+      dialogCallback = cb;
+      document.getElementById('dialog-confirm-btn').onclick = () => { closeDialog(); if (dialogCallback) dialogCallback(); };
+    }
+    function closeDialog() { document.getElementById('confirm-dialog').style.display = 'none'; dialogCallback = null; }
+
+    // ─── Update Counters ───
+    function updateCounts() {
+      const all = [...headlines, ...contents];
+      document.getElementById('count-pending').textContent = all.filter(i => i.status === 'pending').length;
+      document.getElementById('count-approved').textContent = all.filter(i => i.status === 'approved').length;
+      document.getElementById('count-rejected').textContent = all.filter(i => i.status === 'rejected').length;
+    }
+
+    // ─── Stage Toggle ───
+    function setStage(s) {
+      activeStage = s;
+      document.querySelectorAll('.stage-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.stage === s);
+        b.classList.toggle('gradient-primary', b.dataset.stage === s);
+      });
+      render();
+    }
+
+    // ─── Timeline ───
+    function renderTimeline() {
+      const el = document.getElementById('timeline');
+      el.innerHTML = dates.map(d =>
+        `<button class="timeline-btn ${activeDate === d ? 'active gradient-primary' : ''}" onclick="setDate('${d}')">${d}</button>`
+      ).join('');
+    }
+    function setDate(d) { activeDate = d; renderTimeline(); render(); }
+
+    // ─── Status Filter ───
+    function renderStatusFilter() {
+      const filters = [
+        { value: 'all', label: 'Todos', dot: '' },
+        { value: 'pending', label: 'Pendentes', dot: 'dot-warning' },
+        { value: 'approved', label: 'Aprovados', dot: 'dot-success' },
+        { value: 'rejected', label: 'Reprovados', dot: 'dot-primary' },
+      ];
+      const el = document.getElementById('status-filter');
+      el.innerHTML = filters.map(f =>
+        `<button class="filter-btn ${activeStatus === f.value ? 'active' : ''}" onclick="setStatus('${f.value}')">
+          ${f.dot ? `<span class="filter-dot ${f.dot}"></span>` : ''}${f.label}
+        </button>`
+      ).join('');
+    }
+    function setStatus(s) { activeStatus = s; renderStatusFilter(); render(); }
+
+    // ─── Filter data ───
+    function filterItems(items) {
+      let r = activeDate === 'Todos' ? items : items.filter(i => i.date === activeDate);
+      if (activeStatus !== 'all') r = r.filter(i => i.status === activeStatus);
+      return r;
+    }
+
+    // ─── Render Content Cards ───
+    function renderContentCard(c) {
+      const fmt = formatMeta[c.contentFormat];
+      const isPortrait = c.contentFormat === 'stories' || c.contentFormat === 'reels';
+      const statusBorderClass = c.status === 'approved' ? 'border-success' : c.status === 'rejected' ? 'border-primary' : '';
+      const statusLabel = c.status === 'approved' ? 'Aprovado' : c.status === 'rejected' ? 'Reprovado' : 'Pendente';
+      const statusClass = 'status-' + c.status;
+
+      let mediaHtml = `<img src="${c.mediaSrc}" alt="Post content" loading="lazy" />`;
+      if (c.contentFormat === 'carousel' && c.carouselImages.length > 1) {
+        mediaHtml = `<img src="${c.carouselImages[0]}" alt="Slide 1" loading="lazy" />
+          <div class="carousel-dots">${c.carouselImages.map((_, i) => `<span class="carousel-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}</div>`;
+      }
+
+      let videoOverlay = c.mediaType === 'video' ? `<div class="play-overlay"><div class="play-btn gradient-primary shadow-glow">${icons.play}</div></div>` : '';
+
+      let pendingActions = '';
+      if (c.status === 'pending') {
+        pendingActions = `
+          <div class="timer-row">
+            <span class="icon">${icons.clock}</span>
+            <div class="timer-bar-bg">
+              <div class="timer-labels"><span class="timer-label">Auto-aprovação</span><span class="timer-label timer-mono">23:59:59</span></div>
+              <div class="timer-track"><div class="timer-fill" style="width:98%"></div></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:0.5rem;margin-bottom:0.25rem">
+            <button class="suggest-date-btn">${icons.calendar} Sugerir data</button>
+          </div>
+          <div class="action-row">
+            <button class="btn-approve" onclick="approveContent(${c.id})">${icons.check} Aprovar</button>
+            <button class="btn-reject" onclick="toggleCommentContent(${c.id})">${icons.x} Reprovar</button>
+            <button class="btn-comment" onclick="toggleCommentContent(${c.id})">${icons.comment}</button>
+          </div>
+          <div id="comment-content-${c.id}" class="comment-box" style="display:none">
+            <textarea id="comment-text-content-${c.id}" placeholder="Deixe seu comentário..." rows="2"></textarea>
+            <button class="btn-send-feedback gradient-primary" onclick="rejectContent(${c.id})">Enviar feedback</button>
+          </div>`;
+      }
+
+      return `<div class="content-card ${statusBorderClass}">
+        <div class="card-media ${isPortrait ? 'portrait' : 'square'}">
+          ${mediaHtml}${videoOverlay}
+          <div class="card-badges">
+            <span class="badge badge-glass">${c.mediaType === 'video' ? icons.film + ' Vídeo' : icons.image + ' Imagem'}</span>
+            <span class="badge ${fmt.badgeClass}">${fmt.icon} ${fmt.label}</span>
+          </div>
+          <span class="card-status ${statusClass}">${statusLabel}</span>
+        </div>
+        <div class="card-body">
+          <div class="card-meta"><span>${c.date}</span><span class="dot">•</span>${platformIcon(c.platform)}</div>
+          <p class="card-caption line-clamp-3">${c.caption}</p>
+          ${pendingActions}
+          <button class="btn-delete" onclick="deleteContent(${c.id})">${icons.x} Excluir conteúdo</button>
+        </div>
+      </div>`;
+    }
+
+    // ─── Render Headline Cards ───
+    function renderHeadlineCard(h) {
+      const statusBorderClass = h.status === 'approved' ? 'border-success' : h.status === 'rejected' ? 'border-primary' : '';
+      const statusLabel = h.status === 'approved' ? 'Aprovado' : h.status === 'rejected' ? 'Reprovado' : 'Pendente';
+      const statusClass = 'hs-' + h.status;
+
+      let pendingActions = '';
+      if (h.status === 'pending') {
+        pendingActions = `
+          <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem">
+            <button class="suggest-date-btn">${icons.calendar} Sugerir data</button>
+          </div>
+          <div class="action-row">
+            <button class="btn-approve" onclick="approveHeadline(${h.id})">${icons.check} Aprovar</button>
+            <button class="btn-reject" onclick="toggleCommentHeadline(${h.id})">${icons.x} Reprovar</button>
+            <button class="btn-comment" onclick="toggleCommentHeadline(${h.id})">${icons.comment}</button>
+          </div>
+          <div id="comment-headline-${h.id}" class="comment-box" style="display:none">
+            <textarea id="comment-text-headline-${h.id}" placeholder="Deixe seu comentário..." rows="2"></textarea>
+            <button class="btn-send-feedback gradient-primary" onclick="rejectHeadline(${h.id})">Enviar feedback</button>
+          </div>`;
+      }
+
+      return `<div class="headline-card ${statusBorderClass}">
+        <div class="headline-meta">
+          <div class="headline-meta-left"><span>${h.date}</span><span class="dot" style="color:hsla(240,5%,55%,0.5)">•</span>${platformIcon(h.platform)}</div>
+          <span class="headline-status ${statusClass}">${statusLabel}</span>
+        </div>
+        <p class="headline-text">"${h.headline}"</p>
+        ${pendingActions}
+        <button class="btn-delete" onclick="deleteHeadline(${h.id})">${icons.x} Excluir headline</button>
+      </div>`;
+    }
+
+    // ─── Actions ───
+    function approveContent(id) { contents = contents.map(c => c.id === id ? {...c, status: 'approved'} : c); updateCounts(); render(); showToast('✅ Conteúdo aprovado', 'O conteúdo foi aprovado com sucesso.'); }
+    function rejectContent(id) {
+      const comment = document.getElementById('comment-text-content-' + id)?.value || '';
+      contents = contents.map(c => c.id === id ? {...c, status: 'rejected', rejectionComment: comment} : c);
+      updateCounts(); render();
+      showToast('❌ Conteúdo reprovado', comment ? 'Feedback enviado à agência.' : 'O conteúdo foi reprovado.');
+    }
+    function deleteContent(id) { showDialog('Excluir conteúdo?', 'Essa ação não pode ser desfeita. O conteúdo será removido permanentemente.', () => { contents = contents.filter(c => c.id !== id); updateCounts(); render(); showToast('🗑️ Conteúdo excluído', 'O conteúdo foi removido.'); }); }
+    function toggleCommentContent(id) { const el = document.getElementById('comment-content-' + id); if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none'; }
+
+    function approveHeadline(id) { headlines = headlines.map(h => h.id === id ? {...h, status: 'approved'} : h); updateCounts(); render(); showToast('✅ Headline aprovada', 'A headline foi aprovada com sucesso.'); }
+    function rejectHeadline(id) {
+      const comment = document.getElementById('comment-text-headline-' + id)?.value || '';
+      headlines = headlines.map(h => h.id === id ? {...h, status: 'rejected', rejectionComment: comment} : h);
+      updateCounts(); render();
+      showToast('❌ Headline reprovada', comment ? 'Feedback enviado à agência.' : 'A headline foi reprovada.');
+    }
+    function deleteHeadline(id) { showDialog('Excluir headline?', 'Essa ação não pode ser desfeita. A headline será removida permanentemente.', () => { headlines = headlines.filter(h => h.id !== id); updateCounts(); render(); showToast('🗑️ Headline excluída', 'A headline foi removida.'); }); }
+    function toggleCommentHeadline(id) { const el = document.getElementById('comment-headline-' + id); if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none'; }
+
+    // ─── Main Render ───
+    function render() {
+      const area = document.getElementById('content-area');
+      if (activeStage === 'content') {
+        const items = filterItems(contents);
+        area.innerHTML = `
+          <div class="add-card" onclick="showToast('ℹ️ Em breve', 'Funcionalidade de criação de conteúdo.')">
+            <div class="plus-circle"><span class="plus-icon">${icons.plus}</span></div>
+            <div><div class="add-label">Novo Conteúdo</div><div class="add-sub">Post, stories ou reels</div></div>
+          </div>
+          ${items.length ? `<div class="masonry">${items.map(renderContentCard).join('')}</div>` : '<div class="empty-state">Nenhum conteúdo para esta data.</div>'}`;
+      } else {
+        const items = filterItems(headlines);
+        area.innerHTML = `
+          <div class="add-card" onclick="showToast('ℹ️ Em breve', 'Funcionalidade de criação de headline.')">
+            <div class="plus-circle"><span class="plus-icon">${icons.plus}</span></div>
+            <div><div class="add-label">Nova Headline</div><div class="add-sub">Adicionar título para aprovação</div></div>
+          </div>
+          ${items.length ? `<div class="card-grid">${items.map(renderHeadlineCard).join('')}</div>` : '<div class="empty-state">Nenhum conteúdo para esta data.</div>'}`;
+      }
+    }
+
+    // ─── Init ───
+    renderTimeline();
+    renderStatusFilter();
+    updateCounts();
+    render();
+  </script>
+</body>
+</html>
