@@ -3,18 +3,30 @@ Utilize o arquivo dashboard.html para implementar as funcionalidades.
 
 Crie um plugin wordpress, esse plugin é como autor Josias Viskoo e o link de acesso é viskoo.com.br.
 
-O Título do Plugin é Viskoo Media Hub, e a descrição é: Aplicação de aprovação da conteúdo para clientes exclusivos da Viskoo.
+O Título do Plugin é Viskoo Approval, e a descrição é: Aplicação de aprovação da conteúdo para clientes exclusivos da Viskoo.
 
-Crie funcionalidades para toda a estrutura anexa, porém utilize o wordpress para gerenciar os dados e informações.
-
+Crie funcionalidades para toda a estrutura anexa, porém utilize o wordpress para gerenciar os dados e informações, utilize dos custom post type.
 
 ## Dashboard
-- Onde está "Bella Cucina" é o nome do cliente e onde está "Restaurante & Bar" é uma sub-headline. No Administrador do wordpress eu cadastro a empresa e coloco esssas informações para pode exibir na dashboard.
-- Onde existe o número de Pendentes, aprovados e revisão são indicadores dos cards
+- Onde está "Bella Cucina" é o nome do cliente e onde está "Restaurante & Bar" é uma sub-headline. No Administrador do wordpress eu cadastro a empresa e coloco essas informações para poder exibir na dashboard.
+- Onde existe o número de Pendentes, aprovados e revisão são indicadores dos cards exibidos abaixo conforme é clicado.
+- Pense em utilizar as funcionalidades e organização do wordpress para que o sistema funcione perfeitamente.
 
 ## Administrador Wordpress
+- O administrador wordpress é o super-usuário.
 
 ## Administrador na dashboard
-
+- O Administrador na dashboard é diferente do administrador do wordpress.
+- O Administrador na dashboard quando está logado e exibido os elementos pontilhados para administrar.
+- O administrador da dashboard é da produção. E a produção não acessa o painel do wordpress.
+- O administrador na dashboard são visualizáveis apenas pelo administrador na dashboard e não o painel wordpress.
+- No administrador ao clicar nos elementos pontilhados para "nova headline" ou "Novo conteúdo", abre uma janela para preenchimento e carregamento de arquivos para publicação.
+- Ao acessar o link "/login-media" abre um usuário e senha para logar no Administrador na dashboard.
+- Os elementos pontilhados aparecem apenas para os administradores logados.
 
 ## Regras gerais
+- O cliente pode sugerir data de publicação.
+- Quando aprovar precisa pedir confirmação.
+- Quando desaprovar precisa ter um comentário.
+- Pode ser comentado sem a necessidade de aprovar.
+- A auto-aprovação é dada depois de 24 horas publicado.
